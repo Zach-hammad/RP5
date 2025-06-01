@@ -1,0 +1,4 @@
+*.log
+cached_clips/
+__pycache__/
+venv_hailo_rpi5_examples/

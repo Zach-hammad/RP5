@@ -3,3 +3,7 @@ setproctitle
 opencv-python
 loguru
 boto3
+requests
+pynmea2
+pyserial
+PyGObject

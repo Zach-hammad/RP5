@@ -93,12 +93,19 @@ def ping_google():
     return response.status_code
 
 def upload(lp, fn, s3_client, TIGRIS_BUCKET_NAME, key):
-    if ping_google() == 200:
-        s3_client.upload_file(lp, TIGRIS_BUCKET_NAME, key)
-        os.remove(lp)
-        logger.info(f"[INFO] Uploaded {fn} to S3://{TIGRIS_BUCKET_NAME}/{key}")
-    else:
-        time.sleep(120)
-        upload(lp, fn, s3_client, TIGRIS_BUCKET_NAME, key)
+   """Upload a file to S3, retrying until successful."""
+   while True:
+        if ping_google() == 200:
+            s3_client.upload_file(lp, TIGRIS_BUCKET_NAME, key)
+            os.remove(lp)
+            logger.info(
+                f"[INFO] Uploaded {fn} to S3://{TIGRIS_BUCKET_NAME}/{key}"
+            )
+            break
+        else:
+            logger.warning(
+                f"[WARN] Network check failed. Retrying upload of {fn} in 120s"
+            )
+            time.sleep(120) 
 
 
